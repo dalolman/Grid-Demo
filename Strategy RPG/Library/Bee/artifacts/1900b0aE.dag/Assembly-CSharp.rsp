@@ -386,7 +386,9 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2023.2.20f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 "Assets/Scripts/Grid Movement.cs"
 "Assets/Scripts/Grid Squares.cs"
+"Assets/Scripts/GridManager.cs"
 "Assets/Scripts/MouseHighlight.cs"
+"Assets/Scripts/Node.cs"
 "Assets/Scripts/Square Controller.cs"
 -langversion:9.0
 

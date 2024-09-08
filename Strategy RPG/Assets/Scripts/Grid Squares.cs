@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GridSquares : MonoBehaviour
 {
+    [SerializeField] float movementSpeed = 1f;
+
     private bool active;
     private bool attackable;
     private bool blocked;
+    public bool walkable;
+    public bool explored;
+    public bool path;
     private Renderer objectRenderer;
     private int damage = 0;
      public float moveUpDistance = 2.0f;
@@ -20,12 +27,19 @@ public class GridSquares : MonoBehaviour
     public GameObject Left;
     public GameObject Right;
 
+    List<Node> pathing = new List<Node>();
+
     private float playerX, playerZ, targetX, targetZ;
     private float distanceX, distanceZ;
+
+    GridManager gridManager;
+    GridMovement pathfinder;
 
     void Start()
     {
         objectRenderer = GetComponent<Renderer>();
+        gridManager = FindFirstObjectByType<GridManager>();
+        pathfinder = FindFirstObjectByType<GridMovement>();
 
         if (Player != null && Tile != null)
         {
@@ -48,17 +62,23 @@ public class GridSquares : MonoBehaviour
             {
                 if (hit.transform == transform && active)
                 {
-                    // Move the objectToMove to the clicked position
-                    Vector3 newPosition = transform.position;
-                    Player.position = newPosition;
+                    /*   // Move the objectToMove to the clicked position
+                       Vector3 newPosition = transform.position;
+                       Player.position = newPosition;
 
-                    // Move the object up by the specified distance
-                    Vector3 moveUpPosition = newPosition;
-                    moveUpPosition.y += moveUpDistance;
-                    Player.position = moveUpPosition;
+                       // Move the object up by the specified distance
+                       Vector3 moveUpPosition = newPosition;
+                       moveUpPosition.y += moveUpDistance;
+                       Player.position = moveUpPosition;
+                    */
+                    Vector2Int targetCords = hit.transform.GetComponent<Node>().cords;
+                    Vector2Int startCords = new Vector2Int((int)Player.transform.position.x, (int)Player.transform.position.z) / gridManager.UnityGridSize;
+                    pathfinder.SetNewDestination(startCords, targetCords);
+                    RecalculatePath(true);
                 }
             }
         }
+
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -78,6 +98,43 @@ public class GridSquares : MonoBehaviour
         }
 
         UpdateVisuals();
+    }
+
+    void RecalculatePath(bool resetPath)
+    {
+        Vector2Int coordinates = new Vector2Int();
+        if (resetPath)
+        {
+            coordinates = pathfinder.StartCords;
+        }
+        else
+        {
+            coordinates = gridManager.GetCoordsFromPos(transform.position);
+        }
+        StopAllCoroutines();
+        pathing.Clear();
+        pathing = pathfinder.GetNewPath(coordinates);
+        StartCoroutine(FollowPath());
+    }
+
+    IEnumerator FollowPath()
+    {
+        for (int i = 1; i < pathing.Count; i++)
+        {
+            Vector3 startPosition = Player.position;
+            Vector3 endPosition = gridManager.GetPosFromCoords(pathing[i].cords);
+            float travelPercent = 0f;
+
+            Player.LookAt(endPosition);
+
+            while (travelPercent < 1f)
+            {
+                travelPercent += Time.deltaTime * movementSpeed;
+                Player.position = Vector3.Lerp(startPosition, endPosition, travelPercent);
+                yield return new WaitForEndOfFrame();
+            }
+
+        }
     }
 
     private void UpdateDistances()
