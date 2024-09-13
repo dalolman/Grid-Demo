@@ -46,6 +46,7 @@ public class GridSquares : MonoBehaviour
             // Check if the ray hit the current object (this object)
             if (Physics.Raycast(ray, out hit))
             {
+                Debug.Log("Mouse clicked on " + hit);
                 if (hit.transform == transform && active)
                 {
                     // Move the objectToMove to the clicked position

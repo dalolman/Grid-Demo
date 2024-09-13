@@ -1,1 +1,5 @@
+<<<<<<< Updated upstream
 C:\Users\joffe\OneDrive\Documents\Unity\Strategy RPG
+=======
+C:\Users\Jacob\Documents\GitHub\Grid-Demo\Strategy RPG
+>>>>>>> Stashed changes
