@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Player Grid.unity
+- path: Assets/Scenes/Take2/GridTake2.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
