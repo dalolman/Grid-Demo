@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Tile3D : MonoBehaviour
 {
-    [SerializeField] private Color _baseColor, _offsetColor;
+    [SerializeField] private Color _baseColor, _offsetColor, _highlightColor;
     [SerializeField] private GameObject _highlight;
     [SerializeField] private MeshRenderer meshRenderer;
     private Color color;
+    private Color originalColor;
     private Material material;
     private void Start()
     {
@@ -22,16 +23,18 @@ public class Tile3D : MonoBehaviour
         color.a = 1f;
         material.color = color;
         material.color = isOffset ? _offsetColor : _baseColor;
+        originalColor = color;
     }
 
-  /*  void OnMouseEnter()
+    void OnMouseEnter()
     {
         _highlight.SetActive(true);
+        material.color = _highlightColor;
     }
 
     void OnMouseExit()
     {
         _highlight.SetActive(false);
     }
-  */
+ 
 }
