@@ -6,7 +6,7 @@ public class HorizontalGridManager : MonoBehaviour
 {
     [SerializeField] private int width, height;
 
-    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private Tile3D tilePrefab;
 
     [SerializeField] private Transform cam;
 
@@ -24,7 +24,7 @@ public class HorizontalGridManager : MonoBehaviour
                 spawnedTile.name = $"Tile {i} {y}";
 
                 var isOffset = (i % 2 == 0 && y % 2 != 0) || (i % 2 != 0 && y % 2 == 0);
-              //  spawnedTile.Init(isOffset);
+                spawnedTile.Init(isOffset);
             }
         }
         cam.transform.position = new Vector3((float)width / 2 - 0.5f, 10, (float)height / 2 - 0.5f);

@@ -5,22 +5,26 @@ using UnityEngine;
 public class Tile3D : MonoBehaviour
 {
     [SerializeField] private Color _baseColor, _offsetColor;
-    [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private GameObject _highlight;
+    [SerializeField] private MeshRenderer meshRenderer;
     private Color color;
+    private Material material;
     private void Start()
     {
-        color = _renderer.color;
-        color.a = 1f;
-        _renderer.color = color;
+        meshRenderer = this.GetComponent<MeshRenderer>();
+        
     }
 
     public void Init(bool isOffset)
     {
-        _renderer.color = isOffset ? _offsetColor : _baseColor;
+        material = meshRenderer.material;
+        color = material.color;
+        color.a = 1f;
+        material.color = color;
+        material.color = isOffset ? _offsetColor : _baseColor;
     }
 
-    void OnMouseEnter()
+  /*  void OnMouseEnter()
     {
         _highlight.SetActive(true);
     }
@@ -29,4 +33,5 @@ public class Tile3D : MonoBehaviour
     {
         _highlight.SetActive(false);
     }
+  */
 }
